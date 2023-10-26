@@ -35,6 +35,7 @@ def main():
 
     #print(COLS)
     #print(ROWS)
+    #print(range(len(COLS)))
 
     for col_index in range(len(COLS)):
         cols_result = get_values_more_30(COLS[col_index])
