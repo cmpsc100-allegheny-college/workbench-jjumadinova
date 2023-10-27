@@ -56,23 +56,47 @@ def display_results(rows: list = []) -> None:
 ### new functions - start
 def get_participant_info(row_num: int = 0) -> list:
     """ Get specific participant info"""
-    # TODO
+    return ROWS[row_num]
 
 def get_col(column: str = "") -> list:
     """ Get contents of the column"""
-    # TODO
+    values = []
+    idx = COLS.index(column)
+    for row in ROWS:
+        values.append(row[idx])
+    return values
 
 def min(column: str = "") -> int:
-    """ Get minimum age in the column """
-    # TODO
+    """ Get minimum value in the column """
+    minimum = 40
+    values = get_col(column)
+    for value in values:
+        value = int(value)
+        if value < minimum:
+            minimum = value
+    return minimum
 
 def average(column: str = "") -> int:
     """ Computes the average of a column """
-    # TODO
+    total = 0
+    idx = COLS.index(column)
+    for row in ROWS:
+        total += int(row[idx])
+    return total / len(ROWS)
 
 def get_freq(column: str = "") -> int:
     """ Get the most common number that appears in column """
-    # TODO
+    value = 0
+    times = 0
+    data = get_col(column)
+    value = data[0] # mode
+    count = data.count(data[0])
+    for elem in data:
+        times = data.count(elem)
+        if times > count:
+            value = elem
+
+    return value
 
 def main():
     # Menu
@@ -85,13 +109,14 @@ def main():
     print("5. Display all registrants")
     print("0. Exit")
 
+    data = load_file("data/registrants.csv")
+    global COLS
+    global ROWS
+    COLS = data[0]
+    ROWS = data[1:]
+
     # Loop through
     while True:
-        data = load_file("data/registrants.csv")
-        global COLS
-        global ROWS
-        COLS = data[0]
-        ROWS = data[1:]
 
         # Resolve menu
         choice = int(input("Choose an option by number: "))
@@ -102,7 +127,16 @@ def main():
             id = int(input("Enter id to fetch: "))
             row = get_participant_info(id - 1)
             print(f"Fetched participant : {row}")
-        # TODO finish choice menu
+        elif choice == 2:
+            column = "age"
+            minimum = min(column)
+            print(f"Minimum {column}: {minimum}")
+        elif choice == 3:
+            ave = average("age")
+            print("Average age: ", ave)
+        elif choice == 4:
+            mode = get_freq("age")
+            print("Most common age: ", mode)
         elif choice == 5:
             display_results()
 
